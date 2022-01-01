@@ -25,24 +25,10 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import Register from './components/Register/Register';
 
 function App() {
-  return (
-    <View>
-      <Button
-        title="Learn More"
-        color="#841584"
-        accessibilityL
-        abel="Learn more about this purple button"
-      />
-
-      <Button
-        title="Learn More"
-        color="#841584"
-        accessibilityLabel="Learn more about this purple button"
-      />
-    </View>
-  );
+  return <Register />;
 }
 
 export default App;
