@@ -17,56 +17,114 @@ import {
   Alert,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
-const Register = () => {
+const Register = ({navigation}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [number, setNumber] = useState(0);
+  const [password, setPassword] = useState('');
   const [loginHide, setLoginHide] = useState(false);
 
-  const OnRegister = () => {
-    console.log(name);
-    console.log(number);
+  const OnSignUp = () => {
+    if (!name) {
+      alert('Please fill Name');
+      return;
+    }
+    if (!email) {
+      alert('Please fill Email');
+      return;
+    }
+    if (!password) {
+      alert('Please fill Password');
+      return;
+    }
+    auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(user => {
+        console.log(user);
+        console.log(user.user.uid);
+        console.log('Registration Successful. Please Login to proceed');
 
-    firestore()
-      .collection('Users')
-      .add({
-        name: name,
-        contact: number,
-      })
-      .then(() => {
-        Alert.alert(
-          'Success',
-          'You are Registered Successfully',
-          [
-            {
-              text: 'Ok',
-              onPress: () => console.log('Success'),
-            },
-          ],
-          {cancelable: false},
-        );
+        if (user) {
+          firestore()
+            .collection('Users')
+            .add({
+              name: name,
+              email: email,
+              password: password,
+            })
+            .then(() => {
+              navigation.navigate('profile');
+            })
+            .catch(error => {
+              console.log('error firestore');
+            });
+
+          // auth()
+          //   .currentUser.updateProfile({
+          //     displayName: userName,
+          //     photoURL:
+          //       "https://aboutreact.com/profile.png",
+          //   })
+          //   .then(() => navigation.replace("HomeScreen"))
+          //   .catch((error) => {
+          //     alert(error);
+          //     console.error(error);
+          //   });
+        }
       })
       .catch(error => {
-        Alert.alert(
-          'Exception',
-          error,
-          [
-            {
-              text: 'Ok',
-              onPress: () => console.log('error'),
-            },
-          ],
-          {cancelable: false},
-        );
+        console.log('error auth' + error);
+        // if (error.code === 'auth/email-already-in-use') {
+        //   setErrortext('That email address is already in use!');
+        // } else {
+        //   setErrortext(error.message);
+        // }
+      });
+  };
+
+  const OnSignIn = () => {
+    if (!email) {
+      alert('Please fill Email');
+      return;
+    }
+    if (!password) {
+      alert('Please fill Password');
+      return;
+    }
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(user => {
+        console.log(user);
+        // If server response message same as Data Matched
+        if (user) navigation.navigate('profile');
+      })
+      .catch(error => {
+        console.log('sign in error' + error);
+        // if (error.code === "auth/invalid-email")
+        //   setErrortext(error.message);
+        // else if (error.code === "auth/user-not-found")
+        //   setErrortext("No User Found");
+        // else {
+        //   setErrortext(
+        //     "Please check your email id or password"
+        //   );
+        // }
       });
   };
 
   const OnNewAccount = () => {
+    clear();
     setLoginHide(true);
   };
   const OnExistAccount = () => {
-    setLoginHide(true);
+    clear();
+    setLoginHide(false);
+  };
+  const clear = () => {
+    setEmail('');
+    setName('');
+    setPassword('');
   };
 
   return (
@@ -78,7 +136,7 @@ const Register = () => {
             alignItems: 'center',
             marginTop: 20,
           }}>
-          <Text style={{fontSize: 24, color: 'yellow'}}>Authentication</Text>
+          <Text style={{fontSize: 24, color: 'blue'}}>Authentication</Text>
           {loginHide ? (
             <Text style={{fontSize: 25, color: '#ff0000'}}>Sign Up</Text>
           ) : (
@@ -100,9 +158,8 @@ const Register = () => {
             />
             <TextInput
               style={styles.input}
-              onChangeText={setNumber}
-              placeholder="Your Phone Number"
-              keyboardType="numeric"
+              onChangeText={setPassword}
+              placeholder="Enter Your Password"
             />
           </View>
         ) : (
@@ -115,9 +172,8 @@ const Register = () => {
             />
             <TextInput
               style={styles.input}
-              onChangeText={setNumber}
-              placeholder="Your Phone Number"
-              keyboardType="numeric"
+              onChangeText={setPassword}
+              placeholder="Enter Your Password"
             />
           </View>
         )}
@@ -131,7 +187,7 @@ const Register = () => {
 
             <Text
               style={{backgroundColor: '#ffccff', color: 'black', padding: 10}}
-              onPress={OnRegister}>
+              onPress={OnSignUp}>
               Sign Up
             </Text>
           </View>
@@ -145,7 +201,7 @@ const Register = () => {
 
             <Text
               style={{backgroundColor: '#ffccff', color: 'black', padding: 10}}
-              onPress={OnRegister}>
+              onPress={OnSignIn}>
               Sign In
             </Text>
           </View>
