@@ -4,6 +4,7 @@ This project is developed based on React Native. You can park car in parking cen
 And you also see the nearby parking center in your current spot by gooogle map navigator.
 
 # Apps Review
+
 `Login & Registration`
 
 <p>
@@ -26,12 +27,10 @@ And you also see the nearby parking center in your current spot by gooogle map n
     <img src="https://github.com/Saruj-chy/RNFirebase/blob/main/image/resetpassword.jfif"   width="200" >
 </p>
 
-
 `Apk`
 
 <p>
 
-AuthenticateFirebase <a href ="https://github.com/Saruj-chy/RNFirebase/blob/main/Release_Apk/authenticate.apk?raw=true" > Apk </a> <br/>
-
+AuthenticateFirebase <a href ="https://github.com/Saruj-chy/RNFirebase/blob/main/android/app/release/app-release.apk?raw=true" > Apk </a> <br/>
 
 </p>
