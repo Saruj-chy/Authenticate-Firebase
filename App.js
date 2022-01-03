@@ -9,9 +9,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import Register from './components/Register/Register';
 import UpdateProfile from './components/UpdateProfile/UpdateProfile';
-import HomeScreen from './components/HomeScreen/HomeScreen';
 import ForgetPassword from './components/ForgetPassword/ForgetPassword';
-import Testing from './components/Testing/Testing';
 
 const Stack = createStackNavigator();
 

@@ -13,6 +13,7 @@ import {
   BackHandler,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import profile from '../Images/authen.jpg';
 import firestore from '@react-native-firebase/firestore';
@@ -165,68 +166,34 @@ const UpdateProfile = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      {!update ? (
-        <View style={styles.container}>
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 20,
-            }}>
-            <TouchableOpacity onPress={_selectProfile}>
-              {filePath.length == 1 ? (
-                <Image
-                  style={styles.tinyLogo}
-                  source={{uri: filePath[0].uri}}
-                />
-              ) : (
-                <Image style={styles.tinyLogo} source={profile} />
-              )}
-            </TouchableOpacity>
-          </View>
-          {loading ? (
-            <ActivityIndicator
-              size="small"
-              color="#0000ff"
-              style={{marginVertical: 50}}
-            />
-          ) : (
-            <View style={{marginLeft: 30, marginTop: 50}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginTop: 15,
-                }}>
-                <Text style={{fontSize: 16, color: 'white', width: 90}}>
-                  Name:{' '}
-                </Text>
-                <Text style={{fontSize: 25, color: 'white'}}> {name} </Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginTop: 15,
-                }}>
-                <Text style={{fontSize: 16, color: 'white', width: 90}}>
-                  Email{' '}
-                </Text>
-                <Text style={{fontSize: 25, color: 'white'}}> {email} </Text>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginTop: 15,
-                }}>
-                <Text style={{fontSize: 16, color: 'white', width: 90}}>
-                  Password{' '}
-                </Text>
-                <Text style={{fontSize: 22, color: 'white'}}> {password} </Text>
-              </View>
-              {address != null && (
+      <ScrollView>
+        {!update ? (
+          <View style={styles.container}>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 20,
+              }}>
+              <TouchableOpacity onPress={_selectProfile}>
+                {filePath.length == 1 ? (
+                  <Image
+                    style={styles.tinyLogo}
+                    source={{uri: filePath[0].uri}}
+                  />
+                ) : (
+                  <Image style={styles.tinyLogo} source={profile} />
+                )}
+              </TouchableOpacity>
+            </View>
+            {loading ? (
+              <ActivityIndicator
+                size="small"
+                color="#0000ff"
+                style={{marginVertical: 50}}
+              />
+            ) : (
+              <View style={{marginLeft: 30, marginTop: 50}}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -234,119 +201,158 @@ const UpdateProfile = ({navigation, route}) => {
                     marginTop: 15,
                   }}>
                   <Text style={{fontSize: 16, color: 'white', width: 90}}>
-                    Address{' '}
+                    Name:{' '}
+                  </Text>
+                  <Text style={{fontSize: 25, color: 'white'}}> {name} </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: 15,
+                  }}>
+                  <Text style={{fontSize: 16, color: 'white', width: 90}}>
+                    Email{' '}
+                  </Text>
+                  <Text style={{fontSize: 25, color: 'white'}}> {email} </Text>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: 15,
+                  }}>
+                  <Text style={{fontSize: 16, color: 'white', width: 90}}>
+                    Password{' '}
                   </Text>
                   <Text style={{fontSize: 22, color: 'white'}}>
                     {' '}
-                    {address}{' '}
+                    {password}{' '}
                   </Text>
                 </View>
-              )}
-              {date != null && (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginTop: 15,
-                  }}>
-                  <Text style={{fontSize: 16, color: 'white', width: 90}}>
-                    Date of Birth{' '}
-                  </Text>
-                  <Text style={{fontSize: 22, color: 'white'}}> {date} </Text>
-                </View>
-              )}
+                {address != null && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginTop: 15,
+                    }}>
+                    <Text style={{fontSize: 16, color: 'white', width: 90}}>
+                      Address{' '}
+                    </Text>
+                    <Text style={{fontSize: 22, color: 'white'}}>
+                      {' '}
+                      {address}{' '}
+                    </Text>
+                  </View>
+                )}
+                {date != null && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginTop: 15,
+                    }}>
+                    <Text style={{fontSize: 16, color: 'white', width: 90}}>
+                      Date of Birth{' '}
+                    </Text>
+                    <Text style={{fontSize: 22, color: 'white'}}> {date} </Text>
+                  </View>
+                )}
+              </View>
+            )}
+
+            <View style={styles.view2}>
+              <Text
+                onPress={_onLogout}
+                style={{
+                  backgroundColor: '#ffccff',
+                  color: 'black',
+                  padding: 10,
+                }}>
+                Log Out
+              </Text>
+
+              <Text
+                style={{
+                  backgroundColor: '#ffccff',
+                  color: 'black',
+                  padding: 10,
+                  paddingHorizontal: 20,
+                }}
+                onPress={_onUpdateProfile}>
+                Update
+              </Text>
             </View>
-          )}
-
-          <View style={styles.view2}>
-            <Text
-              onPress={_onLogout}
+          </View>
+        ) : (
+          <View style={styles.container}>
+            <View
               style={{
-                backgroundColor: '#ffccff',
-                color: 'black',
-                padding: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 10,
               }}>
-              Log Out
-            </Text>
+              <Image style={styles.tinyLogo} source={profile} />
+            </View>
+            <View style={{marginLeft: 30, marginTop: 20}}></View>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Your Name"
+              value={name}
+              onChangeText={setName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Your Email Address"
+              keyboardType="email-address"
+              value={email}
+              onChangeText={setEmail}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Your Password"
+              value={password}
+              onChangeText={setPassword}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Your Address"
+              value={address}
+              onChangeText={setAddress}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Your Date of Birth"
+              value={date}
+              onChangeText={setDate}
+            />
+            <View style={styles.view2}>
+              <Text
+                onPress={_onCancel}
+                style={{
+                  backgroundColor: '#ffccff',
+                  color: 'black',
+                  padding: 10,
+                }}>
+                Cancel
+              </Text>
 
-            <Text
-              style={{
-                backgroundColor: '#ffccff',
-                color: 'black',
-                padding: 10,
-                paddingHorizontal: 20,
-              }}
-              onPress={_onUpdateProfile}>
-              Update
-            </Text>
+              <Text
+                style={{
+                  backgroundColor: '#ffccff',
+                  color: 'black',
+                  padding: 10,
+                  paddingHorizontal: 20,
+                }}
+                onPress={_onProfileSaved}>
+                Save
+              </Text>
+            </View>
           </View>
-        </View>
-      ) : (
-        <View style={styles.container}>
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 20,
-            }}>
-            <Image style={styles.tinyLogo} source={profile} />
-          </View>
-          <View style={{marginLeft: 30, marginTop: 50}}></View>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Your Name"
-            value={name}
-            onChangeText={setName}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Your Email Address"
-            keyboardType="email-address"
-            value={email}
-            onChangeText={setEmail}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Your Password"
-            value={password}
-            onChangeText={setPassword}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Your Address"
-            value={address}
-            onChangeText={setAddress}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Your Date of Birth"
-            value={date}
-            onChangeText={setDate}
-          />
-          <View style={styles.view2}>
-            <Text
-              onPress={_onCancel}
-              style={{
-                backgroundColor: '#ffccff',
-                color: 'black',
-                padding: 10,
-              }}>
-              Cancel
-            </Text>
-
-            <Text
-              style={{
-                backgroundColor: '#ffccff',
-                color: 'black',
-                padding: 10,
-                paddingHorizontal: 20,
-              }}
-              onPress={_onProfileSaved}>
-              Save
-            </Text>
-          </View>
-        </View>
-      )}
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 };
