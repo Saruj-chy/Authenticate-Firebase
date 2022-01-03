@@ -2,7 +2,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Button,
   ImageBackground,
@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+var SharedPreferences = require('react-native-shared-preferences');
 
 const Register = ({navigation}) => {
   const [name, setName] = useState('');
@@ -46,14 +47,18 @@ const Register = ({navigation}) => {
         console.log('Registration Successful. Please Login to proceed');
 
         if (user) {
+          SharedPreferences.setItem('uid', user.user.uid);
           firestore()
             .collection('Users')
-            .add({
+            .doc(user.user.uid)
+            .set({
               name: name,
               email: email,
               password: password,
             })
             .then(() => {
+              setLoginHide(false);
+              clear();
               navigation.navigate('profile');
             })
             .catch(error => {
@@ -75,6 +80,7 @@ const Register = ({navigation}) => {
       })
       .catch(error => {
         console.log('error auth' + error);
+        alert('Auth failed');
         // if (error.code === 'auth/email-already-in-use') {
         //   setErrortext('That email address is already in use!');
         // } else {
@@ -95,12 +101,20 @@ const Register = ({navigation}) => {
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(user => {
-        console.log(user);
+        console.log('user:' + user);
+        console.log('uid:' + user.user.uid);
         // If server response message same as Data Matched
-        if (user) navigation.navigate('profile');
+        if (user) {
+          setLoginHide(false);
+          clear();
+
+          SharedPreferences.setItem('uid', user.user.uid);
+          navigation.navigate('profile');
+        }
       })
       .catch(error => {
         console.log('sign in error' + error);
+        alert('Please check your valid details...');
         // if (error.code === "auth/invalid-email")
         //   setErrortext(error.message);
         // else if (error.code === "auth/user-not-found")
@@ -125,6 +139,10 @@ const Register = ({navigation}) => {
     setEmail('');
     setName('');
     setPassword('');
+  };
+
+  const OnForgetPassword = () => {
+    navigation.navigate('forget_pass');
   };
 
   return (
@@ -177,6 +195,17 @@ const Register = ({navigation}) => {
             />
           </View>
         )}
+        <Text
+          style={{
+            color: 'white',
+            marginTop: 50,
+            marginHorizontal: 20,
+
+            alignSelf: 'flex-end',
+          }}
+          onPress={OnForgetPassword}>
+          forget password?
+        </Text>
         {loginHide ? (
           <View style={styles.view2}>
             <Text

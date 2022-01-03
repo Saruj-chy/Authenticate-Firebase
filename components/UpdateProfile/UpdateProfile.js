@@ -10,11 +10,14 @@ import {
   Text,
   TextInput,
   View,
+  BackHandler,
 } from 'react-native';
 import profile from '../Images/authen.jpg';
 import firestore from '@react-native-firebase/firestore';
+var SharedPreferences = require('react-native-shared-preferences');
 
-const UpdateProfile = ({navigation}) => {
+const UpdateProfile = ({navigation, route}) => {
+  const [uid, setUid] = useState('');
   const [update, setUpdate] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -22,13 +25,40 @@ const UpdateProfile = ({navigation}) => {
   const [address, setAddress] = useState('');
   const [date, setDate] = useState('');
 
+  // console.log('uid ' + this.props.navigation.getParam('param1', 'NO-VALUE'));
+
   useEffect(() => {
+    SharedPreferences.getItem('uid', function (value) {
+      console.log('value: ' + value);
+      setUid(value);
+      firestore()
+        .collection('Users')
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(documentSnapshot => {
+            console.log('doc id: ' + documentSnapshot.id);
+            if (documentSnapshot.id == value) {
+              // console.log('name: ' + documentSnapshot.data().name);
+              // console.log(documentSnapshot.data().email);
+              // console.log(documentSnapshot.data().password);
+              setName(documentSnapshot.data().name);
+              setEmail(documentSnapshot.data().email);
+              setPassword(documentSnapshot.data().password);
+              setAddress(documentSnapshot.data().address);
+              setDate(documentSnapshot.data().date_of_birth);
+            }
+          });
+        });
+    });
+  }, []);
+
+  const GetFireStoreData = () => {
     firestore()
       .collection('Users')
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(documentSnapshot => {
-          if (documentSnapshot.id == 'JkRzY0KHroY4Y2E6LEdA') {
+          if (documentSnapshot.id == uid) {
             setName(documentSnapshot.data().name);
             setEmail(documentSnapshot.data().email);
             setPassword(documentSnapshot.data().password);
@@ -37,10 +67,12 @@ const UpdateProfile = ({navigation}) => {
           }
         });
       });
-  }, []);
+  };
 
   const OnUpdateProfile = () => {
+    console.log('update' + update);
     setUpdate(true);
+    console.log('update  ' + update);
   };
   const OnProfileSaved = () => {
     // setUpdate(false);
@@ -51,7 +83,7 @@ const UpdateProfile = ({navigation}) => {
     if (name && email && password) {
       firestore()
         .collection('Users')
-        .doc('JkRzY0KHroY4Y2E6LEdA')
+        .doc(uid)
         .update({
           name: name,
           email: email,
@@ -90,12 +122,40 @@ const UpdateProfile = ({navigation}) => {
     }
   };
   const cancel = () => {
+    GetFireStoreData();
     setUpdate(false);
   };
   const OnLogOut = () => {
     console.log('on log out');
     navigation.navigate('register');
   };
+
+  React.useEffect(() => {
+    const backAction = () => {
+      console.log('update' + update);
+      if (update) {
+        setUpdate(false);
+      } else {
+        Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+          {
+            text: 'Cancel',
+            onPress: () => null,
+            style: 'cancel',
+          },
+          {text: 'YES', onPress: () => BackHandler.exitApp()},
+        ]);
+      }
+
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>
