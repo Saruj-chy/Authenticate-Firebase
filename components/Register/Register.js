@@ -26,7 +26,7 @@ const Register = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [loginHide, setLoginHide] = useState(false);
 
-  const OnSignUp = () => {
+  const _onsignup = () => {
     if (!name) {
       alert('Please fill Name');
       return;
@@ -42,10 +42,6 @@ const Register = ({navigation}) => {
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(user => {
-        console.log(user);
-        console.log(user.user.uid);
-        console.log('Registration Successful. Please Login to proceed');
-
         if (user) {
           SharedPreferences.setItem('uid', user.user.uid);
           firestore()
@@ -61,35 +57,15 @@ const Register = ({navigation}) => {
               clear();
               navigation.navigate('profile');
             })
-            .catch(error => {
-              console.log('error firestore');
-            });
-
-          // auth()
-          //   .currentUser.updateProfile({
-          //     displayName: userName,
-          //     photoURL:
-          //       "https://aboutreact.com/profile.png",
-          //   })
-          //   .then(() => navigation.replace("HomeScreen"))
-          //   .catch((error) => {
-          //     alert(error);
-          //     console.error(error);
-          //   });
+            .catch(error => {});
         }
       })
       .catch(error => {
-        console.log('error auth' + error);
         alert('Auth failed');
-        // if (error.code === 'auth/email-already-in-use') {
-        //   setErrortext('That email address is already in use!');
-        // } else {
-        //   setErrortext(error.message);
-        // }
       });
   };
 
-  const OnSignIn = () => {
+  const _onsignin = () => {
     if (!email) {
       alert('Please fill Email');
       return;
@@ -101,9 +77,6 @@ const Register = ({navigation}) => {
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(user => {
-        console.log('user:' + user);
-        console.log('uid:' + user.user.uid);
-        // If server response message same as Data Matched
         if (user) {
           setLoginHide(false);
           clear();
@@ -113,21 +86,11 @@ const Register = ({navigation}) => {
         }
       })
       .catch(error => {
-        console.log('sign in error' + error);
         alert('Please check your valid details...');
-        // if (error.code === "auth/invalid-email")
-        //   setErrortext(error.message);
-        // else if (error.code === "auth/user-not-found")
-        //   setErrortext("No User Found");
-        // else {
-        //   setErrortext(
-        //     "Please check your email id or password"
-        //   );
-        // }
       });
   };
 
-  const OnNewAccount = () => {
+  const _onNewAccount = () => {
     clear();
     setLoginHide(true);
   };
@@ -141,7 +104,7 @@ const Register = ({navigation}) => {
     setPassword('');
   };
 
-  const OnForgetPassword = () => {
+  const _onResetPassword = () => {
     navigation.navigate('forget_pass');
   };
 
@@ -152,13 +115,13 @@ const Register = ({navigation}) => {
           style={{
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: 20,
+            marginVertical: 50,
           }}>
-          <Text style={{fontSize: 24, color: 'blue'}}>Authentication</Text>
+          <Text style={{fontSize: 24, color: 'white'}}>Authentication</Text>
           {loginHide ? (
-            <Text style={{fontSize: 25, color: '#ff0000'}}>Sign Up</Text>
+            <Text style={{fontSize: 25, color: 'white'}}>Sign Up</Text>
           ) : (
-            <Text style={{fontSize: 25, color: '#ff0000'}}>Sign In</Text>
+            <Text style={{fontSize: 25, color: 'white'}}>Sign In</Text>
           )}
         </View>
         {loginHide ? (
@@ -203,7 +166,7 @@ const Register = ({navigation}) => {
 
             alignSelf: 'flex-end',
           }}
-          onPress={OnForgetPassword}>
+          onPress={_onResetPassword}>
           forget password?
         </Text>
         {loginHide ? (
@@ -216,7 +179,7 @@ const Register = ({navigation}) => {
 
             <Text
               style={{backgroundColor: '#ffccff', color: 'black', padding: 10}}
-              onPress={OnSignUp}>
+              onPress={_onsignup}>
               Sign Up
             </Text>
           </View>
@@ -224,13 +187,13 @@ const Register = ({navigation}) => {
           <View style={styles.view2}>
             <Text
               style={{backgroundColor: '#ffccff', color: 'black', padding: 10}}
-              onPress={OnNewAccount}>
+              onPress={_onNewAccount}>
               Create New Account?
             </Text>
 
             <Text
               style={{backgroundColor: '#ffccff', color: 'black', padding: 10}}
-              onPress={OnSignIn}>
+              onPress={_onsignin}>
               Sign In
             </Text>
           </View>

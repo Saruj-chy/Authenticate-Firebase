@@ -23,14 +23,6 @@ function App() {
           name="register"
           component={Register}
           options={{
-            title: 'Register',
-            headerStyle: {
-              backgroundColor: '#f4511e',
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
             headerShown: false,
           }}
         />
@@ -38,59 +30,14 @@ function App() {
           name="profile"
           component={UpdateProfile}
           options={{
-            title: 'Second Page',
-            headerStyle: {
-              backgroundColor: '#f4511e',
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
             headerShown: false,
           }}
         />
-        <Stack.Screen
-          name="home"
-          component={HomeScreen}
-          options={{
-            title: 'Third Page',
-            headerStyle: {
-              backgroundColor: '#f4511e',
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
-            headerShown: false,
-          }}
-        />
+
         <Stack.Screen
           name="forget_pass"
           component={ForgetPassword}
           options={{
-            title: 'forget_pass',
-            headerStyle: {
-              backgroundColor: '#f4511e',
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="testing"
-          component={Testing}
-          options={{
-            title: 'testing',
-            headerStyle: {
-              backgroundColor: '#f4511e',
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
             headerShown: false,
           }}
         />

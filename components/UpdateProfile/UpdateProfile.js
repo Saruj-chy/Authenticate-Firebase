@@ -12,6 +12,7 @@ import {
   View,
   BackHandler,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import profile from '../Images/authen.jpg';
 import firestore from '@react-native-firebase/firestore';
@@ -23,30 +24,25 @@ import DocumentPicker from 'react-native-document-picker';
 const UpdateProfile = ({navigation, route}) => {
   const [uid, setUid] = useState('');
   const [update, setUpdate] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [address, setAddress] = useState('');
   const [date, setDate] = useState('');
   const [filePath, setFilePath] = useState({});
-  const [process, setProcess] = useState('');
-
-  // console.log('uid ' + this.props.navigation.getParam('param1', 'NO-VALUE'));
 
   useEffect(() => {
     SharedPreferences.getItem('uid', function (value) {
-      console.log('value: ' + value);
       setUid(value);
+
       firestore()
         .collection('Users')
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(documentSnapshot => {
-            console.log('doc id: ' + documentSnapshot.id);
             if (documentSnapshot.id == value) {
-              // console.log('name: ' + documentSnapshot.data().name);
-              // console.log(documentSnapshot.data().email);
-              // console.log(documentSnapshot.data().password);
+              setLoading(false);
               setName(documentSnapshot.data().name);
               setEmail(documentSnapshot.data().email);
               setPassword(documentSnapshot.data().password);
@@ -58,13 +54,14 @@ const UpdateProfile = ({navigation, route}) => {
     });
   }, []);
 
-  const GetFireStoreData = () => {
+  const _onGetFirestoreData = () => {
     firestore()
       .collection('Users')
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(documentSnapshot => {
           if (documentSnapshot.id == uid) {
+            setLoading(false);
             setName(documentSnapshot.data().name);
             setEmail(documentSnapshot.data().email);
             setPassword(documentSnapshot.data().password);
@@ -75,17 +72,10 @@ const UpdateProfile = ({navigation, route}) => {
       });
   };
 
-  const OnUpdateProfile = () => {
-    console.log('update' + update);
+  const _onUpdateProfile = () => {
     setUpdate(true);
-    console.log('update  ' + update);
   };
-  const OnProfileSaved = () => {
-    // setUpdate(false);
-
-    console.log(
-      name + '  ' + email + '  ' + password + '  ' + address + ' ' + date,
-    );
+  const _onProfileSaved = () => {
     if (name && email && password) {
       firestore()
         .collection('Users')
@@ -127,41 +117,28 @@ const UpdateProfile = ({navigation, route}) => {
       alert('Please fill all fields');
     }
   };
-  const cancel = () => {
-    GetFireStoreData();
+  const _onCancel = () => {
+    _onGetFirestoreData();
     setUpdate(false);
   };
-  const OnLogOut = () => {
-    console.log('on log out');
+  const _onLogout = () => {
     navigation.navigate('register');
   };
 
   const _selectProfile = async () => {
     try {
       const fileDetails = await DocumentPicker.pick({
-        // Provide which type of file you want user to pick
         type: [DocumentPicker.types.allFiles],
       });
-      console.log('fileDetails : ' + JSON.stringify(fileDetails));
-      //   console.log('fileDetails uri ' + fileDetails[0].uri);
-      //   console.log('fileDetails name ' + fileDetails.name);
-      // Setting the state for selected File
+
       setFilePath(fileDetails);
     } catch (error) {
       setFilePath({});
-      // If user canceled the document selection
-      // alert(
-      //   DocumentPicker.isCancel(error)
-      //     ? 'Canceled'
-      //     : 'Unknown Error: ' + JSON.stringify(error),
-      // );
     }
-    // console.log('filePath: ' + filePath.length);
   };
 
   React.useEffect(() => {
     const backAction = () => {
-      console.log('update' + update);
       if (update) {
         setUpdate(false);
       } else {
@@ -207,72 +184,83 @@ const UpdateProfile = ({navigation, route}) => {
               )}
             </TouchableOpacity>
           </View>
-          <View style={{marginLeft: 30, marginTop: 50}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginTop: 15,
-              }}>
-              <Text style={{fontSize: 16, color: 'white', width: 90}}>
-                Name:{' '}
-              </Text>
-              <Text style={{fontSize: 25, color: 'white'}}> {name} </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginTop: 15,
-              }}>
-              <Text style={{fontSize: 16, color: 'white', width: 90}}>
-                Email{' '}
-              </Text>
-              <Text style={{fontSize: 25, color: 'white'}}> {email} </Text>
-            </View>
+          {loading ? (
+            <ActivityIndicator
+              size="small"
+              color="#0000ff"
+              style={{marginVertical: 50}}
+            />
+          ) : (
+            <View style={{marginLeft: 30, marginTop: 50}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 15,
+                }}>
+                <Text style={{fontSize: 16, color: 'white', width: 90}}>
+                  Name:{' '}
+                </Text>
+                <Text style={{fontSize: 25, color: 'white'}}> {name} </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 15,
+                }}>
+                <Text style={{fontSize: 16, color: 'white', width: 90}}>
+                  Email{' '}
+                </Text>
+                <Text style={{fontSize: 25, color: 'white'}}> {email} </Text>
+              </View>
 
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginTop: 15,
-              }}>
-              <Text style={{fontSize: 16, color: 'white', width: 90}}>
-                Password{' '}
-              </Text>
-              <Text style={{fontSize: 22, color: 'white'}}> {password} </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 15,
+                }}>
+                <Text style={{fontSize: 16, color: 'white', width: 90}}>
+                  Password{' '}
+                </Text>
+                <Text style={{fontSize: 22, color: 'white'}}> {password} </Text>
+              </View>
+              {address != null && (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: 15,
+                  }}>
+                  <Text style={{fontSize: 16, color: 'white', width: 90}}>
+                    Address{' '}
+                  </Text>
+                  <Text style={{fontSize: 22, color: 'white'}}>
+                    {' '}
+                    {address}{' '}
+                  </Text>
+                </View>
+              )}
+              {date != null && (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: 15,
+                  }}>
+                  <Text style={{fontSize: 16, color: 'white', width: 90}}>
+                    Date of Birth{' '}
+                  </Text>
+                  <Text style={{fontSize: 22, color: 'white'}}> {date} </Text>
+                </View>
+              )}
             </View>
-            {address != null && (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginTop: 15,
-                }}>
-                <Text style={{fontSize: 16, color: 'white', width: 90}}>
-                  Address{' '}
-                </Text>
-                <Text style={{fontSize: 22, color: 'white'}}> {address} </Text>
-              </View>
-            )}
-            {date != null && (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginTop: 15,
-                }}>
-                <Text style={{fontSize: 16, color: 'white', width: 90}}>
-                  Date of Birth{' '}
-                </Text>
-                <Text style={{fontSize: 22, color: 'white'}}> {date} </Text>
-              </View>
-            )}
-          </View>
+          )}
 
           <View style={styles.view2}>
             <Text
-              onPress={OnLogOut}
+              onPress={_onLogout}
               style={{
                 backgroundColor: '#ffccff',
                 color: 'black',
@@ -288,7 +276,7 @@ const UpdateProfile = ({navigation, route}) => {
                 padding: 10,
                 paddingHorizontal: 20,
               }}
-              onPress={OnUpdateProfile}>
+              onPress={_onUpdateProfile}>
               Update
             </Text>
           </View>
@@ -337,7 +325,7 @@ const UpdateProfile = ({navigation, route}) => {
           />
           <View style={styles.view2}>
             <Text
-              onPress={cancel}
+              onPress={_onCancel}
               style={{
                 backgroundColor: '#ffccff',
                 color: 'black',
@@ -353,7 +341,7 @@ const UpdateProfile = ({navigation, route}) => {
                 padding: 10,
                 paddingHorizontal: 20,
               }}
-              onPress={OnProfileSaved}>
+              onPress={_onProfileSaved}>
               Save
             </Text>
           </View>
@@ -366,7 +354,7 @@ const UpdateProfile = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'green',
+    backgroundColor: 'brown',
     justifyContent: 'center',
     // alignItems: 'center',
   },

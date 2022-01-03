@@ -21,22 +21,17 @@ import auth from '@react-native-firebase/auth';
 var SharedPreferences = require('react-native-shared-preferences');
 
 const ForgetPassword = ({navigation}) => {
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loginHide, setLoginHide] = useState(false);
 
-  const OnResetEmail = () => {
+  const _onResetEmail = () => {
     auth()
       .sendPasswordResetEmail(email)
       .then(function (user) {
         alert('Please check your email...');
       })
-      .catch(function (e) {
-        console.log(e);
-      });
+      .catch(function (e) {});
   };
-  const OnCancel = () => {
+  const _onCancel = () => {
     navigation.navigate('register');
   };
 
@@ -47,10 +42,10 @@ const ForgetPassword = ({navigation}) => {
           style={{
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: 20,
+            marginVertical: 50,
           }}>
-          <Text style={{fontSize: 24, color: 'blue'}}>Authentication</Text>
-          <Text style={{fontSize: 25, color: '#ff0000'}}>Password Reset</Text>
+          <Text style={{fontSize: 40, color: 'white'}}>Authentication</Text>
+          <Text style={{fontSize: 18, color: 'white'}}>Password Reset</Text>
         </View>
         <View>
           <TextInput
@@ -63,13 +58,13 @@ const ForgetPassword = ({navigation}) => {
         <View style={styles.view2}>
           <Text
             style={{backgroundColor: '#ffccff', color: 'black', padding: 10}}
-            onPress={OnCancel}>
+            onPress={_onCancel}>
             cancel
           </Text>
 
           <Text
             style={{backgroundColor: '#ffccff', color: 'black', padding: 10}}
-            onPress={OnResetEmail}>
+            onPress={_onResetEmail}>
             Reset
           </Text>
         </View>
@@ -87,6 +82,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: 'white',
     color: 'blue',
+    marginVertical: 30,
   },
   image: {
     flex: 1,
