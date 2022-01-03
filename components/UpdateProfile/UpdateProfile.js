@@ -11,10 +11,14 @@ import {
   TextInput,
   View,
   BackHandler,
+  TouchableOpacity,
 } from 'react-native';
 import profile from '../Images/authen.jpg';
 import firestore from '@react-native-firebase/firestore';
 var SharedPreferences = require('react-native-shared-preferences');
+
+import storage from '@react-native-firebase/storage';
+import DocumentPicker from 'react-native-document-picker';
 
 const UpdateProfile = ({navigation, route}) => {
   const [uid, setUid] = useState('');
@@ -24,6 +28,8 @@ const UpdateProfile = ({navigation, route}) => {
   const [password, setPassword] = useState('');
   const [address, setAddress] = useState('');
   const [date, setDate] = useState('');
+  const [filePath, setFilePath] = useState({});
+  const [process, setProcess] = useState('');
 
   // console.log('uid ' + this.props.navigation.getParam('param1', 'NO-VALUE'));
 
@@ -130,6 +136,29 @@ const UpdateProfile = ({navigation, route}) => {
     navigation.navigate('register');
   };
 
+  const _selectProfile = async () => {
+    try {
+      const fileDetails = await DocumentPicker.pick({
+        // Provide which type of file you want user to pick
+        type: [DocumentPicker.types.allFiles],
+      });
+      console.log('fileDetails : ' + JSON.stringify(fileDetails));
+      //   console.log('fileDetails uri ' + fileDetails[0].uri);
+      //   console.log('fileDetails name ' + fileDetails.name);
+      // Setting the state for selected File
+      setFilePath(fileDetails);
+    } catch (error) {
+      setFilePath({});
+      // If user canceled the document selection
+      // alert(
+      //   DocumentPicker.isCancel(error)
+      //     ? 'Canceled'
+      //     : 'Unknown Error: ' + JSON.stringify(error),
+      // );
+    }
+    // console.log('filePath: ' + filePath.length);
+  };
+
   React.useEffect(() => {
     const backAction = () => {
       console.log('update' + update);
@@ -167,7 +196,16 @@ const UpdateProfile = ({navigation, route}) => {
               alignItems: 'center',
               marginTop: 20,
             }}>
-            <Image style={styles.tinyLogo} source={profile} />
+            <TouchableOpacity onPress={_selectProfile}>
+              {filePath.length == 1 ? (
+                <Image
+                  style={styles.tinyLogo}
+                  source={{uri: filePath[0].uri}}
+                />
+              ) : (
+                <Image style={styles.tinyLogo} source={profile} />
+              )}
+            </TouchableOpacity>
           </View>
           <View style={{marginLeft: 30, marginTop: 50}}>
             <View
