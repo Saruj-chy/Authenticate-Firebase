@@ -1,30 +1,29 @@
 # Authenticate in Firebase
 
-This project is developed based on React Native. You can park car in parking center and see the history in your screen . All the date of your parking is seen briefly in your history screen.
-And you also see the nearby parking center in your current spot by gooogle map navigator.
+This project is developed based on React Native. You can sign in and sign up using firebase authentication and firestore. You can also retrive the data from firebase and showing the profile. Talking about forget password, you can also reset the password by sending firebase reset password link by provided email.
 
 # Apps Review
 
 `Login & Registration`
 
 <p>
-  <img src="https://github.com/Saruj-chy/RNFirebase/blob/main/image/signin.jfif"   width="200" >
-  <img src="https://github.com/Saruj-chy/RNFirebase/blob/main/image/signup.jfif"   width="200" >
+  <img src="https://github.com/Saruj-chy/RNFirebase/blob/main/image/signin.jfif"   width="300" >
+  <img src="https://github.com/Saruj-chy/RNFirebase/blob/main/image/signup.jfif"   width="300" >
 
 </p>
 
 `Profile`
 
 <p>
-    <img src="https://github.com/Saruj-chy/RNFirebase/blob/main/image/profile.jfif"   width="200" >
-    <img src="https://github.com/Saruj-chy/RNFirebase/blob/main/image/update_profile.jfif"   width="200" >
+    <img src="https://github.com/Saruj-chy/RNFirebase/blob/main/image/profile.jfif"   width="300" >
+    <img src="https://github.com/Saruj-chy/RNFirebase/blob/main/image/update_profile.jfif"   width="300" >
 
 </p>
 
 `Reset Password`
 
 <p>
-    <img src="https://github.com/Saruj-chy/RNFirebase/blob/main/image/resetpassword.jfif"   width="200" >
+    <img src="https://github.com/Saruj-chy/RNFirebase/blob/main/image/resetpassword.jfif"   width="300" >
 </p>
 
 `Apk`
