@@ -1,6 +1,6 @@
 # Authenticate in Firebase
 
-This project is developed based on React Native. You can sign in and sign up using firebase authentication and firestore. You can also retrive the data from firebase and showing the profile. Talking about forget password, you can also reset the password by sending firebase reset password link by provided email.
+This project is developed based on React Native. You can sign in and sign up using firebase authentication and firestore. You can also retrive the data from firebase and showing the profile. Talking about forget password, you can also reset the password by sending firebase reset password link by provided email. And also logout from the system.
 
 # Apps Review
 
